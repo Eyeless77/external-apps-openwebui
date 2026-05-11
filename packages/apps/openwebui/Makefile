@@ -1,4 +1,4 @@
 export NAME=openwebui
-export NAMESPACE=tenant-test
+export NAMESPACE=tenant-root
 
 include ../../../scripts/package.mk

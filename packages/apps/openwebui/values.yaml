@@ -4,8 +4,14 @@ openwebui:
     type: ClusterIP
   ingress:
     enabled: false
+    class: ""
+    host: ""
+    tls: false
+    annotations: {}
   persistence:
     enabled: true
     size: 10Gi
   ollama:
     enabled: false
+  pipelines:
+    enabled: true

@@ -3,13 +3,18 @@ apiVersion: apps.cozystack.io/v1alpha1
 kind: OpenWebUI
 metadata:
   name: demo
-  namespace: tenant-test
+  namespace: <tenant-namespace>
 spec:
   openwebui:
-    service:
-      type: LoadBalancer
     ingress:
-      enabled: false
+      enabled: true
+      class: <tenant-ingress-class>
+      host: openwebui.example.com
+      tls: true
+      annotations:
+        cert-manager.io/cluster-issuer: <cluster-issuer>
+        acme.cert-manager.io/http01-ingress-ingressclassname: <tenant-ingress-class>
+        nginx.ingress.kubernetes.io/ssl-redirect: "true"
     persistence:
       enabled: true
       size: 10Gi

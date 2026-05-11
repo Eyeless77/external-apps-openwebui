@@ -27,6 +27,25 @@
             "enabled": {
               "type": "boolean",
               "default": false
+            },
+            "class": {
+              "type": "string",
+              "default": ""
+            },
+            "host": {
+              "type": "string",
+              "default": ""
+            },
+            "tls": {
+              "type": "boolean",
+              "default": false
+            },
+            "annotations": {
+              "type": "object",
+              "default": {},
+              "additionalProperties": {
+                "type": "string"
+              }
             }
           }
         },
@@ -51,8 +70,54 @@
               "default": false
             }
           }
+        },
+        "pipelines": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true
+            }
+          }
         }
       }
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "openwebui": {
+            "properties": {
+              "ingress": {
+                "properties": {
+                  "enabled": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "openwebui": {
+            "properties": {
+              "ingress": {
+                "required": [
+                  "host"
+                ],
+                "properties": {
+                  "host": {
+                    "minLength": 1
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
 }

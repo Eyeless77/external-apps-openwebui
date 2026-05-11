@@ -20,6 +20,11 @@ Create a test instance:
 kubectl --kubeconfig kubeconfig apply -f examples/openwebui.yaml
 ```
 
+Adjust placeholders in `examples/openwebui.yaml` before applying:
+- `<tenant-namespace>`: your tenant namespace.
+- `<tenant-ingress-class>`: your tenant ingress class (usually the same as tenant name).
+- `<cluster-issuer>`: your cert-manager ClusterIssuer.
+
 ## Repository layout
 
 ```text
