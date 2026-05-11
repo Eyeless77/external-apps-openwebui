@@ -1,0 +1,17 @@
+---
+apiVersion: apps.cozystack.io/v1alpha1
+kind: OpenWebUI
+metadata:
+  name: demo
+  namespace: tenant-test
+spec:
+  openwebui:
+    service:
+      type: LoadBalancer
+    ingress:
+      enabled: false
+    persistence:
+      enabled: true
+      size: 10Gi
+    ollama:
+      enabled: false

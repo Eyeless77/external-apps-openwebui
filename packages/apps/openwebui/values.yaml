@@ -1,0 +1,11 @@
+openwebui:
+  replicaCount: 1
+  service:
+    type: ClusterIP
+  ingress:
+    enabled: false
+  persistence:
+    enabled: true
+    size: 10Gi
+  ollama:
+    enabled: false

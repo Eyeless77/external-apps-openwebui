@@ -1,0 +1,38 @@
+---
+apiVersion: cozystack.io/v1alpha1
+kind: ApplicationDefinition
+metadata:
+  name: openwebui
+spec:
+  application:
+    kind: OpenWebUI
+    singular: openwebui
+    plural: openwebuis
+    openAPISchema: '{"title":"Chart Values","type":"object","properties":{"openwebui":{"type":"object","properties":{"replicaCount":{"type":"integer","minimum":1,"default":1,"description":"Number of Open WebUI replicas."},"service":{"type":"object","properties":{"type":{"type":"string","enum":["ClusterIP","NodePort","LoadBalancer"],"default":"ClusterIP","description":"Kubernetes Service type for Open WebUI."}}},"ingress":{"type":"object","properties":{"enabled":{"type":"boolean","default":false,"description":"Enable Ingress for Open WebUI."}}},"persistence":{"type":"object","properties":{"enabled":{"type":"boolean","default":true,"description":"Enable persistent storage for Open WebUI data."},"size":{"type":"string","default":"10Gi","description":"Persistent volume size."}}},"ollama":{"type":"object","properties":{"enabled":{"type":"boolean","default":false,"description":"Deploy bundled Ollama service."}}}}}}}'
+  release:
+    chartRef:
+      kind: HelmChart
+      name: external-apps-openwebui
+      namespace: cozy-public
+    labels:
+      cozystack.io/ui: "true"
+    prefix: openwebui-
+  dashboard:
+    category: AI
+    singular: Open WebUI
+    plural: Open WebUI
+    description: Self-hosted web interface for LLMs with built-in RAG and model integrations.
+    tags:
+      - ai
+      - llm
+      - webui
+    icon: PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDMyIDMyIj48cmVjdCB4PSIzIiB5PSIzIiB3aWR0aD0iMjYiIGhlaWdodD0iMjYiIHJ4PSI2IiBmaWxsPSIjMEE2N0YyIi8+PHBhdGggZD0iTTEwIDEwSDE2VjE2SDEwVjEwWk0xNiAxNkgyMlYyMkgxNlYxNlpNMTAgMjJIMTZWMjZIMTBWMjJaTTIyIDEwVjE0SDE4VjEwSDIyWiIgZmlsbD0id2hpdGUiLz48L3N2Zz4K
+    keysOrder:
+      - - apiVersion
+      - - appVersion
+      - - kind
+      - - metadata
+      - - metadata
+        - name
+      - - spec
+        - openwebui
