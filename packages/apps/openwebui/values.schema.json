@@ -1,123 +1,140 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Open WebUI",
+  "title": "Chart Values",
   "type": "object",
   "properties": {
     "openwebui": {
+      "description": "Open WebUI configuration.",
       "type": "object",
+      "default": {},
+      "required": [
+        "ingress",
+        "ollama",
+        "persistence",
+        "pipelines",
+        "replicaCount",
+        "service"
+      ],
       "properties": {
-        "replicaCount": {
-          "type": "integer",
-          "minimum": 1,
-          "default": 1
-        },
-        "service": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": ["ClusterIP", "NodePort", "LoadBalancer"],
-              "default": "ClusterIP"
-            }
-          }
-        },
         "ingress": {
+          "description": "Ingress settings.",
           "type": "object",
+          "default": {},
+          "required": [
+            "annotations",
+            "class",
+            "enabled",
+            "tls"
+          ],
           "properties": {
-            "enabled": {
-              "type": "boolean",
-              "default": false
+            "annotations": {
+              "description": "Additional ingress annotations.",
+              "type": "object",
+              "default": {},
+              "x-kubernetes-preserve-unknown-fields": true
             },
             "class": {
+              "description": "IngressClass name (usually tenant name).",
               "type": "string",
               "default": ""
             },
+            "enabled": {
+              "description": "Enable ingress.",
+              "type": "boolean",
+              "default": false
+            },
             "host": {
+              "description": "Ingress host.",
               "type": "string",
               "default": ""
             },
             "tls": {
+              "description": "Enable TLS section generation.",
               "type": "boolean",
               "default": false
-            },
-            "annotations": {
-              "type": "object",
-              "default": {},
-              "additionalProperties": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "persistence": {
-          "type": "object",
-          "properties": {
-            "enabled": {
-              "type": "boolean",
-              "default": true
-            },
-            "size": {
-              "type": "string",
-              "default": "10Gi"
             }
           }
         },
         "ollama": {
+          "description": "Embedded Ollama chart toggle.",
           "type": "object",
+          "default": {},
+          "required": [
+            "enabled"
+          ],
           "properties": {
             "enabled": {
+              "description": "Enable component.",
               "type": "boolean",
               "default": false
             }
           }
         },
-        "pipelines": {
+        "persistence": {
+          "description": "Storage settings.",
           "type": "object",
+          "default": {},
+          "required": [
+            "enabled",
+            "size"
+          ],
           "properties": {
             "enabled": {
+              "description": "Enable persistent volume claim.",
+              "type": "boolean",
+              "default": true
+            },
+            "size": {
+              "description": "Persistent volume size.",
+              "default": "10Gi",
+              "pattern": "^(\\+|-)?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\\+|-)?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))))?$",
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "x-kubernetes-int-or-string": true
+            }
+          }
+        },
+        "pipelines": {
+          "description": "Embedded Pipelines chart toggle.",
+          "type": "object",
+          "default": {},
+          "required": [
+            "enabled"
+          ],
+          "properties": {
+            "enabled": {
+              "description": "Enable component.",
               "type": "boolean",
               "default": true
             }
           }
-        }
-      }
-    }
-  },
-  "allOf": [
-    {
-      "if": {
-        "properties": {
-          "openwebui": {
-            "properties": {
-              "ingress": {
-                "properties": {
-                  "enabled": {
-                    "const": true
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "then": {
-        "properties": {
-          "openwebui": {
-            "properties": {
-              "ingress": {
-                "required": [
-                  "host"
-                ],
-                "properties": {
-                  "host": {
-                    "minLength": 1
-                  }
-                }
-              }
+        },
+        "replicaCount": {
+          "description": "Number of replicas.",
+          "type": "integer",
+          "default": 1
+        },
+        "service": {
+          "description": "Service settings.",
+          "type": "object",
+          "default": {},
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "description": "Service type.",
+              "type": "string",
+              "default": "ClusterIP"
             }
           }
         }
       }
     }
-  ]
+  }
 }

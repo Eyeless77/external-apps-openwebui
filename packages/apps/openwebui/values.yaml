@@ -1,3 +1,33 @@
+##
+## @section Open WebUI parameters
+##
+
+## @typedef {struct} OpenWebUIIngress - Ingress configuration.
+## @field {bool} enabled - Enable ingress.
+## @field {string} class - IngressClass name (usually tenant name).
+## @field {string} [host] - Ingress host.
+## @field {bool} tls - Enable TLS section generation.
+## @field {object} annotations - Additional ingress annotations.
+
+## @typedef {struct} OpenWebUIPersistence - Persistent storage configuration.
+## @field {bool} enabled - Enable persistent volume claim.
+## @field {quantity} size - Persistent volume size.
+
+## @typedef {struct} OpenWebUIService - Service configuration.
+## @field {string} type - Service type.
+
+## @typedef {struct} OpenWebUIComponentToggle - Subcomponent toggle.
+## @field {bool} enabled - Enable component.
+
+## @typedef {struct} OpenWebUI - Open WebUI Helm values passed to the upstream chart.
+## @field {int} replicaCount - Number of replicas.
+## @field {OpenWebUIService} service - Service settings.
+## @field {OpenWebUIIngress} ingress - Ingress settings.
+## @field {OpenWebUIPersistence} persistence - Storage settings.
+## @field {OpenWebUIComponentToggle} ollama - Embedded Ollama chart toggle.
+## @field {OpenWebUIComponentToggle} pipelines - Embedded Pipelines chart toggle.
+
+## @param {OpenWebUI} openwebui - Open WebUI configuration.
 openwebui:
   replicaCount: 1
   service:

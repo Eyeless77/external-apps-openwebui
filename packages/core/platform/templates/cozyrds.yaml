@@ -8,11 +8,151 @@ spec:
     kind: OpenWebUI
     singular: openwebui
     plural: openwebuis
-    openAPISchema: '{"title":"Chart Values","type":"object","properties":{"openwebui":{"type":"object","properties":{"replicaCount":{"type":"integer","minimum":1,"default":1,"description":"Number of Open WebUI replicas."},"service":{"type":"object","properties":{"type":{"type":"string","enum":["ClusterIP","NodePort","LoadBalancer"],"default":"ClusterIP","description":"Kubernetes Service type for Open WebUI."}}},"ingress":{"type":"object","properties":{"enabled":{"type":"boolean","default":false,"description":"Enable Ingress for Open WebUI."},"class":{"type":"string","default":"","description":"IngressClass name (usually matches tenant name)."},"host":{"type":"string","default":"","description":"Ingress host (required when ingress is enabled)."},"tls":{"type":"boolean","default":false,"description":"Enable TLS block generation in ingress."},"annotations":{"type":"object","default":{},"additionalProperties":{"type":"string"},"description":"Additional ingress annotations."}}},"persistence":{"type":"object","properties":{"enabled":{"type":"boolean","default":true,"description":"Enable persistent storage for Open WebUI data."},"size":{"type":"string","default":"10Gi","description":"Persistent volume size."}}},"ollama":{"type":"object","properties":{"enabled":{"type":"boolean","default":false,"description":"Deploy bundled Ollama service."}}},"pipelines":{"type":"object","properties":{"enabled":{"type":"boolean","default":true,"description":"Deploy bundled Pipelines service for Open WebUI."}}}}}}}'
+    openAPISchema: |
+      {
+        "title": "Chart Values",
+        "type": "object",
+        "properties": {
+          "openwebui": {
+            "description": "Open WebUI configuration.",
+            "type": "object",
+            "default": {},
+            "required": [
+              "ingress",
+              "ollama",
+              "persistence",
+              "pipelines",
+              "replicaCount",
+              "service"
+            ],
+            "properties": {
+              "ingress": {
+                "description": "Ingress settings.",
+                "type": "object",
+                "default": {},
+                "required": [
+                  "annotations",
+                  "class",
+                  "enabled",
+                  "tls"
+                ],
+                "properties": {
+                  "annotations": {
+                    "description": "Additional ingress annotations.",
+                    "type": "object",
+                    "default": {},
+                    "x-kubernetes-preserve-unknown-fields": true
+                  },
+                  "class": {
+                    "description": "IngressClass name (usually tenant name).",
+                    "type": "string",
+                    "default": ""
+                  },
+                  "enabled": {
+                    "description": "Enable ingress.",
+                    "type": "boolean",
+                    "default": false
+                  },
+                  "host": {
+                    "description": "Ingress host.",
+                    "type": "string",
+                    "default": ""
+                  },
+                  "tls": {
+                    "description": "Enable TLS section generation.",
+                    "type": "boolean",
+                    "default": false
+                  }
+                }
+              },
+              "ollama": {
+                "description": "Embedded Ollama chart toggle.",
+                "type": "object",
+                "default": {},
+                "required": [
+                  "enabled"
+                ],
+                "properties": {
+                  "enabled": {
+                    "description": "Enable component.",
+                    "type": "boolean",
+                    "default": false
+                  }
+                }
+              },
+              "persistence": {
+                "description": "Storage settings.",
+                "type": "object",
+                "default": {},
+                "required": [
+                  "enabled",
+                  "size"
+                ],
+                "properties": {
+                  "enabled": {
+                    "description": "Enable persistent volume claim.",
+                    "type": "boolean",
+                    "default": true
+                  },
+                  "size": {
+                    "description": "Persistent volume size.",
+                    "default": "10Gi",
+                    "pattern": "^(\\+|-)?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\\+|-)?(([0-9]+(\\.[0-9]*)?)|(\\.[0-9]+))))?$",
+                    "anyOf": [
+                      {
+                        "type": "integer"
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ],
+                    "x-kubernetes-int-or-string": true
+                  }
+                }
+              },
+              "pipelines": {
+                "description": "Embedded Pipelines chart toggle.",
+                "type": "object",
+                "default": {},
+                "required": [
+                  "enabled"
+                ],
+                "properties": {
+                  "enabled": {
+                    "description": "Enable component.",
+                    "type": "boolean",
+                    "default": true
+                  }
+                }
+              },
+              "replicaCount": {
+                "description": "Number of replicas.",
+                "type": "integer",
+                "default": 1
+              },
+              "service": {
+                "description": "Service settings.",
+                "type": "object",
+                "default": {},
+                "required": [
+                  "type"
+                ],
+                "properties": {
+                  "type": {
+                    "description": "Service type.",
+                    "type": "string",
+                    "default": "ClusterIP"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
   release:
     chartRef:
       kind: HelmChart
-      name: external-apps-openwebui
+      name: external-apps-openwebui-openwebui
       namespace: cozy-public
     labels:
       cozystack.io/ui: "true"
@@ -20,13 +160,13 @@ spec:
   dashboard:
     category: AI
     singular: Open WebUI
-    plural: Open WebUI
+    plural: Open WebUI Apps
     description: Self-hosted web interface for LLMs with built-in RAG and model integrations.
     tags:
       - ai
       - llm
       - webui
-    icon: PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDMyIDMyIj48cmVjdCB4PSIzIiB5PSIzIiB3aWR0aD0iMjYiIGhlaWdodD0iMjYiIHJ4PSI2IiBmaWxsPSIjMEE2N0YyIi8+PHBhdGggZD0iTTEwIDEwSDE2VjE2SDEwVjEwWk0xNiAxNkgyMlYyMkgxNlYxNlpNMTAgMjJIMTZWMjZIMTBWMjJaTTIyIDEwVjE0SDE4VjEwSDIyWiIgZmlsbD0id2hpdGUiLz48L3N2Zz4K
+    icon: PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMTI4IDEyOCI+CiAgPHJlY3Qgd2lkdGg9IjEyOCIgaGVpZ2h0PSIxMjgiIHJ4PSIyMCIgZmlsbD0iIzI1NjNlYiIvPgogIDxwYXRoIGQ9Ik0zNCAzNmgyNHYyNEgzNFYzNnptMzYgMGgyNHYyNEg3MFYzNnpNMzQgNjhoMjR2MjRIMzRWNjh6bTM2IDEyaDI0djEySDcwVjgweiIgZmlsbD0iI2ZmZiIvPgo8L3N2Zz4K
     keysOrder:
       - - apiVersion
       - - appVersion
