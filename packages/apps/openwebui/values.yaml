@@ -4,8 +4,8 @@
 
 ## @typedef {struct} OpenWebUIIngress - Ingress configuration.
 ## @field {bool} enabled - Enable ingress.
-## @field {string} class - IngressClass name (usually tenant name).
-## @field {string} [host] - Ingress host.
+## @field {string} class - IngressClass name (defaults to release namespace / tenant name).
+## @field {string} [host] - Ingress host (defaults to <release-name>.<tenant-host>).
 ## @field {bool} tls - Enable TLS section generation.
 ## @field {object} annotations - Additional ingress annotations.
 

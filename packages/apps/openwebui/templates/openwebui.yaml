@@ -1,7 +1,16 @@
+{{- $ns := index .Values "_namespace" | default dict }}
+{{- $tenantHost := index $ns "host" | default "" }}
+{{- $defaultHost := "" }}
+{{- if $tenantHost }}
+{{- $defaultHost = printf "%s.%s" .Release.Name $tenantHost }}
+{{- end }}
+{{- $ingressHost := .Values.openwebui.ingress.host | default $defaultHost }}
+{{- $ingressClass := .Values.openwebui.ingress.class | default .Release.Namespace }}
+
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: {{ .Release.Name }}-upstream
+  name: {{ .Release.Name }}-system
 spec:
   interval: 5m
   chart:
@@ -18,8 +27,8 @@ spec:
       type: {{ .Values.openwebui.service.type }}
     ingress:
       enabled: {{ .Values.openwebui.ingress.enabled }}
-      class: {{ .Values.openwebui.ingress.class | quote }}
-      host: {{ .Values.openwebui.ingress.host | quote }}
+      class: {{ $ingressClass | quote }}
+      host: {{ $ingressHost | quote }}
       tls: {{ .Values.openwebui.ingress.tls }}
       annotations:
 {{ toYaml .Values.openwebui.ingress.annotations | indent 8 }}

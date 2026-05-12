@@ -33,7 +33,7 @@
               "x-kubernetes-preserve-unknown-fields": true
             },
             "class": {
-              "description": "IngressClass name (usually tenant name).",
+              "description": "IngressClass name (defaults to release namespace / tenant name).",
               "type": "string",
               "default": ""
             },
@@ -43,7 +43,7 @@
               "default": false
             },
             "host": {
-              "description": "Ingress host.",
+              "description": "Ingress host (defaults to \u003crelease-name\u003e.\u003ctenant-host\u003e).",
               "type": "string",
               "default": ""
             },
@@ -110,7 +110,7 @@
             "enabled": {
               "description": "Enable component.",
               "type": "boolean",
-              "default": true
+              "default": false
             }
           }
         },
